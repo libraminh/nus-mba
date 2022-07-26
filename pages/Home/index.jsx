@@ -4,6 +4,20 @@ import NusMasthead from '../../components/NusMasthead';
 import LoadingScreen from '../../components/LoadingScreen';
 import { getJourney } from '../../utils/api';
 
+const HomePage = () => {
+  const { data: journeyData, isLoading } = useQuery(['journeys'], getJourney);
+
+  if (isLoading) return <LoadingScreen />;
+
+  return (
+    <>
+      <NusMasthead headingContent={journeyData?.data.general} />
+    </>
+  );
+};
+
+export default HomePage;
+
 export async function getStaticProps() {
   const queryClient = new QueryClient();
 
@@ -15,17 +29,3 @@ export async function getStaticProps() {
     },
   };
 }
-
-const HomePage = () => {
-  const { data: journeyData, isLoading } = useQuery(['journeys'], getJourney);
-
-  if (isLoading) return <LoadingScreen />;
-
-  return (
-    <div>
-      <NusMasthead headingContent={journeyData?.data.general} />
-    </div>
-  );
-};
-
-export default HomePage;

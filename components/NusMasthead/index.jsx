@@ -3,7 +3,7 @@ import MastheadImage from '../../public/images/masthead-img.png';
 
 const NusMasthead = ({ headingContent }) => {
   return (
-    <div className='px-7'>
+    <section className='px-7'>
       <div className='text-center'>
         <h2
           className='text-26 leading-31 md:text-2.5xl font-bold mb-8'
@@ -21,7 +21,7 @@ const NusMasthead = ({ headingContent }) => {
           <Image src={MastheadImage} alt='image' />
         </figure>
       </div>
-    </div>
+    </section>
   );
 };
 
