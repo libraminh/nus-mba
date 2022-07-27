@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const isDevMod = process.env.NODE_ENV === 'development';
 // export const url = isDevMod ? 'http://nus-gso.constructdigital.net' : window.location.origin;
-export const url = 'http://nus-gso.constructdigital.net';
+export const url = 'https://nus-gso.constructdigital.net';
 const apiURL = `${url}/wp-json/nus-gso/v1`;
 export const assetsURL = `${url}/wp-content/plugins/construct-nus-gso/themes/build/static/media`;
 

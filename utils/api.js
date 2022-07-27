@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const url = 'http://nus-gso.constructdigital.net';
+export const url = 'https://nus-gso.constructdigital.net';
 const apiURL = `${url}/wp-json/nus-gso/v1`;
 
 export const getJourney = async () => {

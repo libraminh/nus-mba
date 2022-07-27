@@ -11,6 +11,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query';
+import ErrorBoundary from '../components/ErrorBoundary';
 
 const twentyFourHoursInMs = 1000 * 60 * 60 * 24;
 
@@ -32,9 +33,11 @@ function MyApp({ Component, pageProps }) {
   return (
     <QueryClientProvider client={queryClient}>
       <Hydrate state={pageProps.dehydratedState}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <ErrorBoundary>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </ErrorBoundary>
       </Hydrate>
     </QueryClientProvider>
   );
