@@ -3,6 +3,7 @@ import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
 import NusMasthead from '../../components/NusMasthead';
 import LoadingScreen from '../../components/LoadingScreen';
 import { getJourney } from '../../utils/api';
+import HomeMBARecommended from '../../components/HomeMBARecommended';
 
 const HomePage = () => {
   const { data: journeyData, isLoading } = useQuery(['journeys'], getJourney);
@@ -10,9 +11,10 @@ const HomePage = () => {
   if (isLoading) return <LoadingScreen />;
 
   return (
-    <>
+    <div className='homepage space-y-9'>
       <NusMasthead headingContent={journeyData?.data.general} />
-    </>
+      <HomeMBARecommended journeys={journeyData?.data.journeys} />
+    </div>
   );
 };
 

@@ -2,6 +2,9 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-}
+  images: {
+    domains: ['nus-gso.constructdigital.net'],
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
