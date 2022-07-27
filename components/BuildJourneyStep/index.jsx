@@ -44,8 +44,6 @@ const BuildJourneyStep = () => {
     getJourneyOptions
   );
 
-  if (isLoading) return <LoadingScreen />;
-
   const handleNext = (step) => {
     setActivePanel(step);
     form.submit();
@@ -55,12 +53,6 @@ const BuildJourneyStep = () => {
     // console.log(values);
   };
 
-  // const initFormValues = {
-  //   industries: 109,
-  //   interests: 123,
-  //   roles: 96,
-  // };
-
   const ArrowDownIcon = () => (
     <Image
       className='transform rotate-90 -translate-x-5'
@@ -69,26 +61,17 @@ const BuildJourneyStep = () => {
     />
   );
 
-  // const formInitValues = useMemo(() => {
-  //   const { industries, interests, roles } = journeyOptions?.data;
-  //   return {
-  //     industries: industries[0].val,
-  //     interests: interests[0].val,
-  //     roles: roles[0].val,
-  //   };
-  // }, [journeyOptions?.data]);
-
-  const formInitValues = () => {
+  const formInitValues = useMemo(() => {
+    if (!journeyOptions) return;
     const { industries, interests, roles } = journeyOptions?.data;
-
-    console.log('journeyOptions', journeyOptions);
-
     return {
       industries: industries[0].val,
       interests: interests[0].val,
       roles: roles[0].val,
     };
-  };
+  }, [journeyOptions?.data]);
+
+  if (isLoading) return <LoadingScreen />;
 
   const renderPanelContent = (index) => {
     switch (index) {
@@ -100,7 +83,7 @@ const BuildJourneyStep = () => {
               name='control-hooks'
               onFinish={onFinish}
               className='space-y-8'
-              initialValues={formInitValues()}
+              initialValues={formInitValues}
             >
               {Object.values(journeyOptions?.data)?.map((select, index) => {
                 return (
@@ -206,11 +189,6 @@ const BuildJourneyStep = () => {
             </Link>
           </div>
         );
-      case 3:
-        return <span>span 3</span>;
-
-      default:
-        return <></>;
     }
   };
 
