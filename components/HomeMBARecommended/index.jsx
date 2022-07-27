@@ -33,11 +33,10 @@ const HomeMBARecommended = ({ journeys }) => {
 
       <figure className='self-end space-x-5 py-7 px-7 md:px-0'>
         <Link href={BUILD_JOURNEY_PAGE}>
-          <a>
+          <a className='block w-full md:max-w-[350px]'>
             <FeaturedCard
               heading='Create your own MBA journey'
               subHeading='Indicate your career interest, and we will recommend a customised MBA journey for you.'
-              className='w-full md:max-w-[350px]'
               customSubHeadingClass={`!max-w-[220px]`}
             />
           </a>

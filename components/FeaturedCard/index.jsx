@@ -49,6 +49,7 @@ const FeaturedCard = ({
               objectPosition='left bottom'
               width={135}
               height={101}
+              priority
             />
           </div>
         ) : (
