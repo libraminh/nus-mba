@@ -11,7 +11,11 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query';
-import ErrorBoundary from '../components/ErrorBoundary';
+// import ErrorBoundary from '../components/ErrorBoundary';
+
+import { QueryErrorResetBoundary } from '@tanstack/react-query';
+import { ErrorBoundary } from 'react-error-boundary';
+import LoadingScreen from '../components/LoadingScreen';
 
 const twentyFourHoursInMs = 1000 * 60 * 60 * 24;
 
@@ -25,6 +29,7 @@ function MyApp({ Component, pageProps }) {
             refetchOnReconnect: false,
             refetchOnmount: false,
             cacheTime: twentyFourHoursInMs,
+            suspense: true,
           },
         },
       })
@@ -33,11 +38,22 @@ function MyApp({ Component, pageProps }) {
   return (
     <QueryClientProvider client={queryClient}>
       <Hydrate state={pageProps.dehydratedState}>
-        <ErrorBoundary>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </ErrorBoundary>
+        <QueryErrorResetBoundary>
+          {({ reset }) => (
+            <ErrorBoundary
+              fallbackRender={({ error, resetErrorBoundary }) => (
+                <LoadingScreen />
+              )}
+              onReset={reset}
+            >
+              <React.Suspense fallback={<h1>Loading projects...</h1>}>
+                <Layout>
+                  <Component {...pageProps} />
+                </Layout>
+              </React.Suspense>
+            </ErrorBoundary>
+          )}
+        </QueryErrorResetBoundary>
       </Hydrate>
     </QueryClientProvider>
   );

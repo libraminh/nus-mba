@@ -10,7 +10,6 @@ import NextBlueArrow from '../../public/images/next-blue-arrow.png';
 // import './styles.scss';
 import ButtonNext from '../ButtonNext';
 import HeadingBox from '../HeadingBox';
-import LoadingScreen from '../LoadingScreen';
 
 const { Panel } = Collapse;
 const { Option } = Select;
@@ -39,7 +38,7 @@ const BuildJourneyStep = () => {
   const [activePanel, setActivePanel] = useState(1);
   const [form] = Form.useForm();
 
-  const { data: journeyOptions, isLoading } = useQuery(
+  const { data: journeyOptions } = useQuery(
     ['journeyOptions'],
     getJourneyOptions
   );
@@ -70,8 +69,6 @@ const BuildJourneyStep = () => {
       roles: roles[0].val,
     };
   }, [journeyOptions?.data]);
-
-  if (isLoading) return <LoadingScreen />;
 
   const renderPanelContent = (index) => {
     switch (index) {
@@ -226,7 +223,7 @@ const BuildJourneyStep = () => {
 
 export default BuildJourneyStep;
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery('journeyOptions', getJourneyOptions);

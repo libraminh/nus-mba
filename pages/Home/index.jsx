@@ -1,14 +1,11 @@
 import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
 
 import NusMasthead from '../../components/NusMasthead';
-import LoadingScreen from '../../components/LoadingScreen';
 import { getJourney } from '../../utils/api';
 import HomeMBARecommended from '../../components/HomeMBARecommended';
 
 const HomePage = () => {
-  const { data: journeyData, isLoading } = useQuery(['journeys'], getJourney);
-
-  if (isLoading) return <LoadingScreen />;
+  const { data: journeyData } = useQuery(['journeys'], getJourney);
 
   return (
     <div className='homepage space-y-9'>
@@ -20,7 +17,7 @@ const HomePage = () => {
 
 export default HomePage;
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery('journeys', getJourney);
