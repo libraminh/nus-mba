@@ -26,7 +26,7 @@ const JourneyDetail = () => {
 
   const switchPersona = (item) => {
     router.push({
-      pathname: `/journey/${item.jid}`,
+      pathname: `/journey/${item.jID}`,
     });
 
     setTimeout(() => {

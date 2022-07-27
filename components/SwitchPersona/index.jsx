@@ -62,6 +62,7 @@ const SwitchPersona = ({
     afterChange: function (index) {
       if (afterChangeTimeout.current) clearTimeout(afterChangeTimeout.current);
       afterChangeTimeout.current = setTimeout(() => {
+        console.log('hihihihi');
         handleOnClick(cachedJourneys?.data.journeys[index]);
       }, 1000);
     },
