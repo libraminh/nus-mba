@@ -12,7 +12,7 @@ const Layout = ({ children }) => {
 
       <BaseHeader />
 
-      {children}
+      <div className='app-wrapper max-w-1456 mx-auto'>{children}</div>
     </>
   );
 };
