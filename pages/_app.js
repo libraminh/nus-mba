@@ -1,7 +1,10 @@
 import React from 'react';
 
+import Layout from '../components/Layout';
+
 import 'antd/dist/antd.css';
-import '../styles/globals.css';
+import '../styles/tailwind.css';
+import '../styles/main.scss';
 
 import {
   Hydrate,
@@ -29,7 +32,9 @@ function MyApp({ Component, pageProps }) {
   return (
     <QueryClientProvider client={queryClient}>
       <Hydrate state={pageProps.dehydratedState}>
-        <Component {...pageProps} />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
       </Hydrate>
     </QueryClientProvider>
   );
