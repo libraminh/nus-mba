@@ -126,7 +126,7 @@ const BuildJourneyStep = () => {
               onClick={() => handleNext(index + 1)}
             >
               <span>Next</span>
-              <span>
+              <span className='flex'>
                 <Image src={NextArrow} alt='icon' />
               </span>
             </ButtonNext>
@@ -178,7 +178,7 @@ const BuildJourneyStep = () => {
               <a className='inline-block'>
                 <ButtonNext className='space-x-8'>
                   <span>Next</span>
-                  <span>
+                  <span className='flex'>
                     <Image src={NextArrow} alt='icon' />
                   </span>
                 </ButtonNext>

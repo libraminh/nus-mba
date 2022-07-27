@@ -5,7 +5,7 @@ const NusMasthead = ({ headingContent }) => {
   return (
     <section className='px-7'>
       <div className='text-center'>
-        <h2
+        <h1
           className='text-26 leading-31 md:text-2.5xl font-bold mb-8'
           dangerouslySetInnerHTML={{ __html: headingContent.title }}
         />

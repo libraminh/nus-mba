@@ -11,7 +11,6 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query';
-// import ErrorBoundary from '../components/ErrorBoundary';
 
 import { QueryErrorResetBoundary } from '@tanstack/react-query';
 import { ErrorBoundary } from 'react-error-boundary';

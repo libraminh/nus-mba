@@ -15,7 +15,7 @@ const HomeMBARecommended = ({ journeys }) => {
           {journeys?.map((item, index) => (
             <React.Fragment key={item.jID}>
               <Link href={`journey/${item.jID}`}>
-                <a className='h-full'>
+                <a>
                   <FeaturedCard
                     theme='white'
                     heading={item.title}
