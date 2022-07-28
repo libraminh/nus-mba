@@ -103,7 +103,7 @@ const JourneyDetail = () => {
 
 export default JourneyDetail;
 
-export async function getServerSideProps(ctx) {
+export async function getStaticProps({ params }) {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery('journeyDetail', getJourneyOptions);
@@ -114,4 +114,28 @@ export async function getServerSideProps(ctx) {
       dehydratedState: dehydrate(queryClient),
     },
   };
+}
+
+export async function getStaticPaths() {
+  // Call an external API endpoint to get posts
+  // const resJourneyOptions = await getJourneyOptions();
+  // const resJourney = await getJourney();
+
+  // console.log('resJourney', resJourney);
+
+  // const journey = await resJourney.json();
+
+  // const queryClient = new QueryClient();
+
+  // await queryClient.prefetchQuery('journeyDetail', getJourneyOptions);
+  // await queryClient.prefetchQuery('journeys', getJourney);
+
+  // Get the paths we want to pre-render based on posts
+  // const paths = resJourney?.data?.journeys.map((journey) => ({
+  //   params: { jid: journey.jID },
+  // }));
+
+  // We'll pre-render only these paths at build time.
+  // { fallback: false } means other routes should 404.
+  return { paths: [], fallback: 'blocking' };
 }
