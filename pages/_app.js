@@ -15,6 +15,16 @@ import {
 import { QueryErrorResetBoundary } from '@tanstack/react-query';
 import { ErrorBoundary } from 'react-error-boundary';
 import LoadingScreen from '../components/LoadingScreen';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import rootReducer from '@/store/index';
+
+console.log('process.env.NODE_ENV', process.env.NODE_ENV);
+
+const store = configureStore({
+  reducer: rootReducer,
+  devTools: process.env.NODE_ENV === 'development',
+});
 
 const twentyFourHoursInMs = 1000 * 60 * 60 * 24;
 
@@ -37,22 +47,24 @@ function MyApp({ Component, pageProps }) {
   return (
     <QueryClientProvider client={queryClient}>
       <Hydrate state={pageProps.dehydratedState}>
-        <QueryErrorResetBoundary>
-          {({ reset }) => (
-            <ErrorBoundary
-              fallbackRender={({ error, resetErrorBoundary }) => (
-                <LoadingScreen />
-              )}
-              onReset={reset}
-            >
-              <React.Suspense fallback={<h1>Loading projects...</h1>}>
-                <Layout>
-                  <Component {...pageProps} />
-                </Layout>
-              </React.Suspense>
-            </ErrorBoundary>
-          )}
-        </QueryErrorResetBoundary>
+        <Provider store={store}>
+          <QueryErrorResetBoundary>
+            {({ reset }) => (
+              <ErrorBoundary
+                fallbackRender={({ error, resetErrorBoundary }) => (
+                  <LoadingScreen />
+                )}
+                onReset={reset}
+              >
+                <React.Suspense fallback={<h1>Loading projects...</h1>}>
+                  <Layout>
+                    <Component {...pageProps} />
+                  </Layout>
+                </React.Suspense>
+              </ErrorBoundary>
+            )}
+          </QueryErrorResetBoundary>
+        </Provider>
       </Hydrate>
     </QueryClientProvider>
   );

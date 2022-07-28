@@ -1,5 +1,5 @@
-import { fetchJourneyDetailByOptions } from "@/api";
-import { useQuery } from "react-query";
+import { useQuery } from '@tanstack/react-query';
+import { fetchJourneyDetailByOptions } from '../api';
 
 export const useFetchJourneyByOptions = ({
   shouldRedirect,
@@ -7,7 +7,7 @@ export const useFetchJourneyByOptions = ({
   journeyHash,
 }) => {
   const { isFetching, data: journeyDetail } = useQuery(
-    "journeyDetail",
+    ['journeyDetail'],
     async () => {
       return await fetchJourneyDetailByOptions({
         shouldRedirect,

@@ -62,7 +62,6 @@ const SwitchPersona = ({
     afterChange: function (index) {
       if (afterChangeTimeout.current) clearTimeout(afterChangeTimeout.current);
       afterChangeTimeout.current = setTimeout(() => {
-        console.log('hihihihi');
         handleOnClick(cachedJourneys?.data.journeys[index]);
       }, 1000);
     },
@@ -88,10 +87,7 @@ const SwitchPersona = ({
       >
         {cachedJourneys?.data.journeys?.map((item, index) => (
           <div key={item.jID}>
-            <div
-              className='cursor-pointer md:flex md:items-center md:justify-between space-y-5 md:space-y-0 md:space-x-20 '
-              // onClick={() => handleOnClick(item)}
-            >
+            <div className='cursor-pointer md:flex md:items-center md:justify-between space-y-5 md:space-y-0 md:space-x-20 '>
               <figure className='text-center md:text-left'>
                 <h1 className='text-26 leading-31 md:text-3xl font-bold mb-2'>
                   {item.detail_title}
