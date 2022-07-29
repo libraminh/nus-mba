@@ -131,7 +131,7 @@ const RecommendedDetail = () => {
           <Link
             href={{
               pathname: '/journey',
-              state: { jID: id },
+              query: { jID: jid },
             }}
           >
             <a>
@@ -145,19 +145,20 @@ const RecommendedDetail = () => {
       ) : (
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7 px-7 py-10'>
           <Link
-            href='/journey'
-            // to={{
-            //   pathname: '/journey',
-            //   state: { jID: jid },
-            // }}
+            href={{
+              pathname: '/journey',
+              query: { jID: jid },
+            }}
             className='inline-block'
           >
-            <FeaturedCard
-              heading='Customise from a journey'
-              subHeading='Use this journey as a starting point to review and select other electives and experiences'
-              imageUrl={CustomiseJourneyImage}
-              customSubHeadingClass={`!max-w-[220px]`}
-            />
+            <a>
+              <FeaturedCard
+                heading='Customise from a journey'
+                subHeading='Use this journey as a starting point to review and select other electives and experiences'
+                imageUrl={CustomiseJourneyImage}
+                customSubHeadingClass={`!max-w-[220px]`}
+              />
+            </a>
           </Link>
         </div>
       )}
@@ -167,7 +168,7 @@ const RecommendedDetail = () => {
 
 export default RecommendedDetail;
 
-export async function getServerSideProps({ params }) {
+export async function getStaticProps({ params }) {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery('journeyDetail', () =>
@@ -180,4 +181,21 @@ export async function getServerSideProps({ params }) {
       dehydratedState: dehydrate(queryClient),
     },
   };
+}
+
+export async function getStaticPaths() {
+  const resJourneys = await getJourney();
+
+  const paths1 = resJourneys?.data?.journeys.map((item) => ({
+    params: { jid: String(item.jID), moduleIndex: String(1) },
+  }));
+  const paths2 = resJourneys?.data?.journeys.map((item) => ({
+    params: { jid: String(item.jID), moduleIndex: String(2) },
+  }));
+  const paths3 = resJourneys?.data?.journeys.map((item) => ({
+    params: { jid: String(item.jID), moduleIndex: String(3) },
+  }));
+  const paths = [...paths1, ...paths2, ...paths3];
+
+  return { paths, fallback: false };
 }

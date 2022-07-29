@@ -15,7 +15,7 @@ const JourneyDetail = () => {
   const { journeyDetail, refetch } = useFetchJourney(jid);
   const { floatingNav, floatingNavClasses } = useFloatingNav();
 
-  const { data } = useQuery(['journeys'], getJourney);
+  useQuery(['journeys'], getJourney);
 
   const handleBack = () => {
     router.push('/');
