@@ -7,6 +7,7 @@
       "@/constants/*": ["constants/*"],
       "@/api/*": ["api/*"],
       "@/store/*": ["store/*"],
+      "@/public/*": ["public/*"],
       "@/hooks/*": ["hooks/*"]
     }
   }

@@ -15,7 +15,9 @@ const JourneyDetail = () => {
   const { journeyDetail, refetch } = useFetchJourney(jid);
   const { floatingNav, floatingNavClasses } = useFloatingNav();
 
-  useQuery(['journeys'], getJourney);
+  const { data } = useQuery(['journeys'], getJourney);
+
+  console.log('data >>>', data);
 
   const handleBack = () => {
     router.push('/');
@@ -110,7 +112,8 @@ export async function getStaticProps({ params }) {
   await queryClient.prefetchQuery('journeyDetail', () =>
     useFetchJourney(params.jid)
   );
-  await queryClient.prefetchQuery(['journeys'], getJourney);
+
+  await queryClient.prefetchQuery('journeys', getJourney);
 
   return {
     props: {
@@ -120,5 +123,11 @@ export async function getStaticProps({ params }) {
 }
 
 export async function getStaticPaths() {
-  return { paths: [], fallback: 'blocking' };
+  const resJourneys = await getJourney();
+
+  const paths = resJourneys?.data?.journeys.map((item) => ({
+    params: { jid: item.jID.toString() },
+  }));
+
+  return { paths, fallback: false };
 }

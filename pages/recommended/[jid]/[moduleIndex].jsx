@@ -12,10 +12,13 @@ import { useFloatingNav } from '@/hooks/useFloatingNav';
 import { useSpcialLinks } from '@/hooks/useSpcialLinks';
 import { useSpecialHeading } from '@/hooks/useSpecialHeading';
 import { useSpecialJourneys } from '@/hooks/useSpecialJourney';
-import { dehydrate, QueryClient } from '@tanstack/react-query';
+import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { getJourney } from '../../../api';
+import CustomiseJourneyImage from '../../../public/images/customise-journey.png';
+
 // import { useHistory, useParams } from 'react-router';
 // import { Link } from 'react-router-dom';
 
@@ -24,22 +27,15 @@ const RecommendedDetail = () => {
 
   console.log('router', router);
 
-  // let history = useHistory();
-  // let { index: moduleIndex, id } = useParams();
-
-  // const { index: moduleIndex, id } = router?.query;
-
-  const jid = router?.query?.all[0];
-  const moduleIndex = router?.query?.all[1];
+  const { moduleIndex, jid } = router?.query;
 
   const { isFetching, journeyDetail, refetch } = useFetchJourney(jid);
-
-  console.log('journeyDetail', journeyDetail);
+  useQuery(['journeys'], getJourney);
 
   const isSpecialJourney = useSpecialJourneys(journeyDetail);
   const realEstateSubHeading = useSpecialHeading(journeyDetail);
   const handleExternalLink = useSpcialLinks(journeyDetail);
-  const { floatingNav, floatingNavClasses } = useFloatingNav();
+  // const { floatingNav, floatingNavClasses } = useFloatingNav();
 
   const handleBack = () => {
     router.push({
@@ -123,7 +119,7 @@ const RecommendedDetail = () => {
         </span>
       </figure>
 
-      <figure ref={floatingNav} className={`${floatingNavClasses}`}>
+      {/* <figure ref={floatingNav} className={`${floatingNavClasses}`}>
         <div className='md:px-7 flex items-center mb-5 space-x-4 max-w-1456 mx-auto'>
           <span
             onClick={handleBack}
@@ -133,7 +129,7 @@ const RecommendedDetail = () => {
             <span className='text-xl'>Back to journey overview</span>
           </span>
         </div>
-      </figure>
+      </figure> */}
 
       <div className='px-7 mb-10 md:mb-8 space-y-3'>
         <span className='text-26 font-bold text-nus-black-200 px-12'>
@@ -182,7 +178,7 @@ const RecommendedDetail = () => {
             <FeaturedCard
               heading='Customise from a journey'
               subHeading='Use this journey as a starting point to review and select other electives and experiences'
-              imageUrl={require('../../public/images/customise-journey.png')}
+              imageUrl={CustomiseJourneyImage}
               customSubHeadingClass={`!max-w-[220px]`}
             />
           </Link>
@@ -200,7 +196,7 @@ export async function getStaticProps({ params }) {
   await queryClient.prefetchQuery('journeyDetail', () =>
     useFetchJourney(params.jid)
   );
-  // await queryClient.prefetchQuery(['journeys'], getJourney);
+  await queryClient.prefetchQuery(['journeys'], getJourney);
 
   return {
     props: {
