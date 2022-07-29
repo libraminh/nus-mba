@@ -19,8 +19,6 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import rootReducer from '@/store/index';
 
-console.log('process.env.NODE_ENV', process.env.NODE_ENV);
-
 const store = configureStore({
   reducer: rootReducer,
   devTools: process.env.NODE_ENV === 'development',

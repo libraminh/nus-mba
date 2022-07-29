@@ -19,13 +19,8 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { getJourney } from '../../../api';
 import CustomiseJourneyImage from '../../../public/images/customise-journey.png';
 
-// import { useHistory, useParams } from 'react-router';
-// import { Link } from 'react-router-dom';
-
 const RecommendedDetail = () => {
   const router = useRouter();
-
-  console.log('router', router);
 
   const { moduleIndex, jid } = router?.query;
 
@@ -105,8 +100,6 @@ const RecommendedDetail = () => {
     }, 100);
   };
 
-  // if (isFetching) return <LoadingScreen />;
-
   return (
     <div>
       <figure className='px-7 inline-flex items-center mb-5 space-x-4'>
@@ -118,18 +111,6 @@ const RecommendedDetail = () => {
           <span className='text-xl'>Back to journey overview</span>
         </span>
       </figure>
-
-      {/* <figure ref={floatingNav} className={`${floatingNavClasses}`}>
-        <div className='md:px-7 flex items-center mb-5 space-x-4 max-w-1456 mx-auto'>
-          <span
-            onClick={handleBack}
-            className='flex items-end space-x-4 cursor-pointer'
-          >
-            <BackIcon />
-            <span className='text-xl'>Back to journey overview</span>
-          </span>
-        </div>
-      </figure> */}
 
       <div className='px-7 mb-10 md:mb-8 space-y-3'>
         <span className='text-26 font-bold text-nus-black-200 px-12'>
@@ -143,11 +124,7 @@ const RecommendedDetail = () => {
         />
       </div>
 
-      <div className='md:px-7'>
-        {renderContent()}
-        {/* <div className={`py-10 md:p-10 rounded-xl ${setBackgroundColor()}`}>
-        </div> */}
-      </div>
+      <div className='md:px-7'>{renderContent()}</div>
 
       {isSpecialJourney ? (
         <div className='px-5 md:px-7 pb-10 md:pb-14 mt-10'>
@@ -190,21 +167,17 @@ const RecommendedDetail = () => {
 
 export default RecommendedDetail;
 
-export async function getStaticProps({ params }) {
+export async function getServerSideProps({ params }) {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery('journeyDetail', () =>
     useFetchJourney(params.jid)
   );
-  await queryClient.prefetchQuery(['journeys'], getJourney);
+  await queryClient.prefetchQuery('journeys', getJourney);
 
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
     },
   };
-}
-
-export async function getStaticPaths() {
-  return { paths: [], fallback: 'blocking' };
 }

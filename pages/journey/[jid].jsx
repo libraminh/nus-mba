@@ -17,8 +17,6 @@ const JourneyDetail = () => {
 
   const { data } = useQuery(['journeys'], getJourney);
 
-  console.log('data >>>', data);
-
   const handleBack = () => {
     router.push('/');
   };

@@ -42,8 +42,6 @@ const Journey = () => {
   const shouldRedirect = true;
   const router = useRouter();
 
-  console.log('router', router);
-
   const journeyHash = '';
   // let history = useHistory();
   // let location = useLocation();
