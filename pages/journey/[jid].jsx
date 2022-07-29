@@ -14,6 +14,7 @@ const JourneyDetail = () => {
 
   const { journeyDetail, refetch } = useFetchJourney(jid);
   const { floatingNav, floatingNavClasses } = useFloatingNav();
+
   useQuery(['journeys'], getJourney);
 
   const handleBack = () => {
@@ -104,13 +105,12 @@ const JourneyDetail = () => {
 export default JourneyDetail;
 
 export async function getStaticProps({ params }) {
-  console.log('params >>>', params);
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery('journeyDetail', () =>
     useFetchJourney(params.jid)
   );
-  await queryClient.prefetchQuery('journeys', getJourney);
+  await queryClient.prefetchQuery(['journeys'], getJourney);
 
   return {
     props: {
