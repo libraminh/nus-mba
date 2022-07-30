@@ -21,9 +21,14 @@ const BtnArrow = ({
       onClick={handleOnClick}
     >
       {theme == 'blue' ? (
-        <Image className={iconClassName} src={NextBlueArrow} alt='thumb' />
+        <Image
+          className={iconClassName}
+          src={NextBlueArrow}
+          alt='thumb'
+          priority
+        />
       ) : (
-        <Image className={iconClassName} src={NextArrow} alt='thumb' />
+        <Image className={iconClassName} src={NextArrow} alt='thumb' priority />
       )}
     </span>
   );

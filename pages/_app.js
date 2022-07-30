@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 
 import Layout from '../components/Layout';
 
@@ -54,11 +54,11 @@ function MyApp({ Component, pageProps }) {
                 )}
                 onReset={reset}
               >
-                <React.Suspense fallback={<h1>Loading projects...</h1>}>
+                <Suspense fallback={<h1>Loading projects...</h1>}>
                   <Layout>
                     <Component {...pageProps} />
                   </Layout>
-                </React.Suspense>
+                </Suspense>
               </ErrorBoundary>
             )}
           </QueryErrorResetBoundary>

@@ -1,6 +1,6 @@
 import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
-import { getJourney, getJourneyOptions } from '../../api';
+import { getJourney } from '../../api';
 import BackIcon from '../../components/BackIcon';
 import BtnArrow from '../../components/BtnArrow';
 import SwitchPersona from '../../components/SwitchPersona';

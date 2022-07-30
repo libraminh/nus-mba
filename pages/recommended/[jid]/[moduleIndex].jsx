@@ -12,7 +12,12 @@ import { useFloatingNav } from '@/hooks/useFloatingNav';
 import { useSpcialLinks } from '@/hooks/useSpcialLinks';
 import { useSpecialHeading } from '@/hooks/useSpecialHeading';
 import { useSpecialJourneys } from '@/hooks/useSpecialJourney';
-import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
+import {
+  dehydrate,
+  QueryClient,
+  useIsFetching,
+  useQuery,
+} from '@tanstack/react-query';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
@@ -24,8 +29,10 @@ const RecommendedDetail = () => {
 
   const { moduleIndex, jid } = router?.query;
 
-  const { isFetching, journeyDetail, refetch } = useFetchJourney(jid);
   useQuery(['journeys'], getJourney);
+  const { journeyDetail, refetch } = useFetchJourney(jid);
+
+  const isFetching = useIsFetching();
 
   const isSpecialJourney = useSpecialJourneys(journeyDetail);
   const realEstateSubHeading = useSpecialHeading(journeyDetail);
@@ -38,7 +45,9 @@ const RecommendedDetail = () => {
     });
   };
 
-  const renderContent = () => {
+  const renderContent = useMemo(() => {
+    if (!journeyDetail) return;
+
     switch (moduleIndex) {
       case '1':
         return (
@@ -84,7 +93,7 @@ const RecommendedDetail = () => {
       default:
         return;
     }
-  };
+  }, [moduleIndex, journeyDetail, handleExternalLink, isSpecialJourney]);
 
   const renderHeading = useMemo(() => {
     return journeyDetail?.data.general.sections[moduleIndex - 1].title;
@@ -99,6 +108,8 @@ const RecommendedDetail = () => {
       refetch();
     }, 100);
   };
+
+  if (isFetching) return <LoadingScreen />;
 
   return (
     <div>
@@ -124,7 +135,7 @@ const RecommendedDetail = () => {
         />
       </div>
 
-      <div className='md:px-7'>{renderContent()}</div>
+      <div className='md:px-7'>{renderContent}</div>
 
       {isSpecialJourney ? (
         <div className='px-5 md:px-7 pb-10 md:pb-14 mt-10'>
@@ -168,34 +179,33 @@ const RecommendedDetail = () => {
 
 export default RecommendedDetail;
 
-export async function getStaticProps({ params }) {
-  const queryClient = new QueryClient();
+// export async function getStaticProps({ params }) {
+//   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery('journeyDetail', () =>
-    useFetchJourney(params.jid)
-  );
-  await queryClient.prefetchQuery('journeys', getJourney);
+//   await queryClient.prefetchQuery('journeyDetail', () =>
+//     useFetchJourney(params.jid)
+//   );
+//   await queryClient.prefetchQuery('journeys', getJourney);
 
-  return {
-    props: {
-      dehydratedState: dehydrate(queryClient),
-    },
-  };
-}
+//   return {
+//     props: {
+//       dehydratedState: dehydrate(queryClient),
+//     },
+//   };
+// }
 
-export async function getStaticPaths() {
-  const resJourneys = await getJourney();
+// export async function getStaticPaths() {
+//   const resJourneys = await getJourney();
 
-  const paths1 = resJourneys?.data?.journeys.map((item) => ({
-    params: { jid: String(item.jID), moduleIndex: String(1) },
-  }));
-  const paths2 = resJourneys?.data?.journeys.map((item) => ({
-    params: { jid: String(item.jID), moduleIndex: String(2) },
-  }));
-  const paths3 = resJourneys?.data?.journeys.map((item) => ({
-    params: { jid: String(item.jID), moduleIndex: String(3) },
-  }));
-  const paths = [...paths1, ...paths2, ...paths3];
+//   const moduleIndexNumbers = [1, 2, 3];
 
-  return { paths, fallback: false };
-}
+//   const paths = moduleIndexNumbers
+//     .map((key) => {
+//       return resJourneys?.data?.journeys?.map((item) => ({
+//         params: { jid: String(item.jID), moduleIndex: String(key) },
+//       }));
+//     })
+//     .flat();
+
+//   return { paths, fallback: false };
+// }
