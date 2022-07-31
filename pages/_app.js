@@ -18,6 +18,7 @@ import LoadingScreen from '../components/LoadingScreen';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import rootReducer from '@/store/index';
+import NextNProgress from 'nextjs-progressbar';
 
 const store = configureStore({
   reducer: rootReducer,
@@ -56,6 +57,7 @@ function MyApp({ Component, pageProps }) {
               >
                 <Suspense fallback={<LoadingScreen />}>
                   <Layout>
+                    <NextNProgress color='#ee7b22' />
                     <Component {...pageProps} />
                   </Layout>
                 </Suspense>

@@ -49,7 +49,7 @@ const JourneyDetail = ({ journeyDetails, journeys }) => {
       scale: 1,
       opacity: 1,
       transition: {
-        delay: 0.4,
+        duration: 0.2,
       },
     },
   };
