@@ -1,26 +1,22 @@
 import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/router';
-import { getJourney, getJourneyDetail } from '../../api';
+import { getJourney } from '../../api';
 import BackIcon from '../../components/BackIcon';
 import BtnArrow from '../../components/BtnArrow';
 import SwitchPersona from '../../components/SwitchPersona';
 import { useFetchJourney } from '../../hooks/useFetchJourney';
 import { useFloatingNav } from '../../hooks/useFloatingNav';
 
-const JourneyDetail = ({ journeyDetails, journeys }) => {
+const JourneyDetail = () => {
   const router = useRouter();
 
   const { jid } = router?.query;
 
-  const { data: journeyDetail, refetch } = useQuery(
-    ['journeyDetail'],
-    () => getJourneyDetail(jid),
-    { initialData: journeyDetails }
-  );
+  const { journeyDetail, refetch } = useFetchJourney(jid);
   const { floatingNav, floatingNavClasses } = useFloatingNav();
 
-  useQuery(['journeys'], getJourney, { initialData: journeys });
+  useQuery(['journeys'], getJourney);
 
   const handleBack = () => {
     router.push('/');
@@ -42,14 +38,12 @@ const JourneyDetail = ({ journeyDetails, journeys }) => {
 
   const variants = {
     hidden: {
-      scale: 0.8,
       opacity: 0,
     },
     visible: {
-      scale: 1,
       opacity: 1,
       transition: {
-        duration: 0.2,
+        duration: 0.25,
       },
     },
   };
@@ -88,7 +82,7 @@ const JourneyDetail = ({ journeyDetails, journeys }) => {
 
           <div className='space-y-7 px-7 py-9 md:rounded-xl bg-nus-gray-200'>
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7'>
-              {journeyDetail.data.general.sections?.map((item, index) => (
+              {journeyDetail?.data.general.sections?.map((item, index) => (
                 <figure
                   key={index}
                   className={`rounded-xl bg-white p-4 min-w-220 md:min-w-0 shadow-lg`}
@@ -126,23 +120,19 @@ const JourneyDetail = ({ journeyDetails, journeys }) => {
 export default JourneyDetail;
 
 export async function getStaticProps({ params }) {
-  const journeyDetails = await getJourneyDetail(params.jid);
-  const journeys = await getJourney();
-  return { props: { journeyDetails, journeys } };
+  const queryClient = new QueryClient();
 
-  // const queryClient = new QueryClient();
+  await queryClient.prefetchQuery('journeyDetail', () =>
+    useFetchJourney(params.jid)
+  );
 
-  // await queryClient.prefetchQuery('journeyDetail', () =>
-  //   useFetchJourney(params.jid)
-  // );
+  await queryClient.prefetchQuery('journeys', getJourney);
 
-  // await queryClient.prefetchQuery('journeys', getJourney);
-
-  // return {
-  //   props: {
-  //     dehydratedState: dehydrate(queryClient),
-  //   },
-  // };
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+    },
+  };
 }
 
 export async function getStaticPaths() {
