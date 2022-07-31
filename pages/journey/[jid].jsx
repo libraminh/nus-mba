@@ -14,7 +14,7 @@ const JourneyDetail = ({ journeyDetails, journeys }) => {
 
   const { data: journeyDetail, refetch } = useQuery(
     ['journeyDetail'],
-    () => getJourneyDetail(jID),
+    () => getJourneyDetail(jid),
     { initialData: journeyDetails }
   );
   const { floatingNav, floatingNavClasses } = useFloatingNav();
