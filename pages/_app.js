@@ -54,7 +54,7 @@ function MyApp({ Component, pageProps }) {
                 )}
                 onReset={reset}
               >
-                <Suspense fallback={<h1>Loading projects...</h1>}>
+                <Suspense fallback={<LoadingScreen />}>
                   <Layout>
                     <Component {...pageProps} />
                   </Layout>

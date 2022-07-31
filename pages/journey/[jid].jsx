@@ -1,21 +1,25 @@
 import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
-import { getJourney } from '../../api';
+import { getJourney, getJourneyDetail } from '../../api';
 import BackIcon from '../../components/BackIcon';
 import BtnArrow from '../../components/BtnArrow';
 import SwitchPersona from '../../components/SwitchPersona';
 import { useFetchJourney } from '../../hooks/useFetchJourney';
 import { useFloatingNav } from '../../hooks/useFloatingNav';
 
-const JourneyDetail = () => {
+const JourneyDetail = ({ journeyDetails, journeys }) => {
   const router = useRouter();
 
   const { jid } = router?.query;
 
-  const { journeyDetail, refetch } = useFetchJourney(jid);
+  const { data: journeyDetail, refetch } = useQuery(
+    ['journeyDetail'],
+    () => getJourneyDetail(jID),
+    { initialData: journeyDetails }
+  );
   const { floatingNav, floatingNavClasses } = useFloatingNav();
 
-  useQuery(['journeys'], getJourney);
+  useQuery(['journeys'], getJourney, { initialData: journeys });
 
   const handleBack = () => {
     router.push('/');
@@ -105,19 +109,23 @@ const JourneyDetail = () => {
 export default JourneyDetail;
 
 export async function getStaticProps({ params }) {
-  const queryClient = new QueryClient();
+  const journeyDetails = await getJourneyDetail(params.jid);
+  const journeys = await getJourney();
+  return { props: { journeyDetails, journeys } };
 
-  await queryClient.prefetchQuery('journeyDetail', () =>
-    useFetchJourney(params.jid)
-  );
+  // const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery('journeys', getJourney);
+  // await queryClient.prefetchQuery('journeyDetail', () =>
+  //   useFetchJourney(params.jid)
+  // );
 
-  return {
-    props: {
-      dehydratedState: dehydrate(queryClient),
-    },
-  };
+  // await queryClient.prefetchQuery('journeys', getJourney);
+
+  // return {
+  //   props: {
+  //     dehydratedState: dehydrate(queryClient),
+  //   },
+  // };
 }
 
 export async function getStaticPaths() {
