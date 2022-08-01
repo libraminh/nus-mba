@@ -1,6 +1,6 @@
+import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useFetchJourneys } from '../../hooks/useFetchJourneys';
 import { SampleNextArrow, SamplePrevArrow } from './PersonaArrows';
 import { CarouselStyled, CarouselWrapper } from './styled';
 
@@ -9,7 +9,9 @@ const SwitchPersona = ({
   handleOnClick = () => {},
   layout = 'grid grid-cols-3 md:grid-cols-4 gap-5',
 }) => {
-  const { journeyData } = useFetchJourneys();
+  const queryClient = useQueryClient();
+
+  const journeyData = queryClient.getQueryData(['journeys']) || {};
 
   const [slickSlider, setslickSlider] = useState(null);
   const sliderRef = useRef(null);
@@ -43,7 +45,7 @@ const SwitchPersona = ({
   useEffect(() => {
     if (!!!slickSlider) return;
     slickSlider.goTo(newJourneysIndex);
-  }, [slickSlider]);
+  }, [slickSlider, newJourneysIndex]);
 
   useEffect(() => {
     return () => {

@@ -6,6 +6,7 @@ import BackIcon from '../../components/BackIcon';
 import BtnArrow from '../../components/BtnArrow';
 import SwitchPersona from '../../components/SwitchPersona';
 import { useFetchJourney } from '../../hooks/useFetchJourney';
+import { useFetchJourneys } from '../../hooks/useFetchJourneys';
 import { useFloatingNav } from '../../hooks/useFloatingNav';
 
 const JourneyDetail = () => {
@@ -16,7 +17,7 @@ const JourneyDetail = () => {
   const { journeyDetail, refetch } = useFetchJourney(jid);
   const { floatingNav, floatingNavClasses } = useFloatingNav();
 
-  useQuery(['journeys'], getJourney);
+  const { journeyData } = useFetchJourneys();
 
   const handleBack = () => {
     router.push('/');
@@ -122,11 +123,11 @@ export default JourneyDetail;
 export async function getStaticProps({ params }) {
   const queryClient = new QueryClient();
 
-  await queryClient.prefetchQuery('journeyDetail', () =>
+  await queryClient.prefetchQuery(['journeyDetail'], () =>
     useFetchJourney(params.jid)
   );
 
-  await queryClient.prefetchQuery('journeys', getJourney);
+  await queryClient.prefetchQuery(['journeys'], getJourney);
 
   return {
     props: {

@@ -1,11 +1,12 @@
-import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 
-import NusMasthead from '../../components/NusMasthead';
-import { getJourney } from '../../utils/api';
 import HomeMBARecommended from '../../components/HomeMBARecommended';
+import NusMasthead from '../../components/NusMasthead';
+import { useFetchJourneys } from '../../hooks/useFetchJourneys';
+import { getJourney } from '../../utils/api';
 
 const HomePage = () => {
-  const { data: journeyData } = useQuery(['journeys'], getJourney);
+  const { journeyData } = useFetchJourneys();
 
   return (
     <div className='homepage space-y-9'>

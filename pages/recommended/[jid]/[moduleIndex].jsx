@@ -8,20 +8,15 @@ import LoadingScreen from '@/components/LoadingScreen';
 import ModulePanel from '@/components/ModulePanel';
 import SwitchPersona from '@/components/SwitchPersona';
 import { useFetchJourney } from '@/hooks/useFetchJourney';
-import { useFloatingNav } from '@/hooks/useFloatingNav';
 import { useSpcialLinks } from '@/hooks/useSpcialLinks';
 import { useSpecialHeading } from '@/hooks/useSpecialHeading';
 import { useSpecialJourneys } from '@/hooks/useSpecialJourney';
-import {
-  dehydrate,
-  QueryClient,
-  useIsFetching,
-  useQuery,
-} from '@tanstack/react-query';
+import { useIsFetching } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { getJourney } from '../../../api';
+import { useMemo } from 'react';
+import { useFetchJourneys } from '../../../hooks/useFetchJourneys';
+import { useFloatingNav } from '../../../hooks/useFloatingNav';
 import CustomiseJourneyImage from '../../../public/images/customise-journey.png';
 
 const RecommendedDetail = () => {
@@ -29,7 +24,8 @@ const RecommendedDetail = () => {
 
   const { moduleIndex, jid } = router?.query;
 
-  useQuery(['journeys'], getJourney);
+  const { journeyData } = useFetchJourneys();
+
   const { journeyDetail, refetch } = useFetchJourney(jid);
 
   const isFetching = useIsFetching();
@@ -37,7 +33,7 @@ const RecommendedDetail = () => {
   const isSpecialJourney = useSpecialJourneys(journeyDetail);
   const realEstateSubHeading = useSpecialHeading(journeyDetail);
   const handleExternalLink = useSpcialLinks(journeyDetail);
-  // const { floatingNav, floatingNavClasses } = useFloatingNav();
+  const { floatingNav, floatingNavClasses } = useFloatingNav();
 
   const handleBack = () => {
     router.push({
@@ -89,9 +85,6 @@ const RecommendedDetail = () => {
             specialModules={journeyDetail.data.student_clubs}
           />
         );
-
-      default:
-        return;
     }
   }, [moduleIndex, journeyDetail, handleExternalLink, isSpecialJourney]);
 
@@ -121,6 +114,18 @@ const RecommendedDetail = () => {
           <BackIcon />
           <span className='text-xl'>Back to journey overview</span>
         </span>
+      </figure>
+
+      <figure ref={floatingNav} className={`${floatingNavClasses}`}>
+        <div className='md:px-7 flex items-center mb-5 space-x-4 max-w-1456 mx-auto'>
+          <span
+            onClick={handleBack}
+            className='flex items-end space-x-4 cursor-pointer'
+          >
+            <BackIcon />
+            <span className='text-xl'>Back to journey overview</span>
+          </span>
+        </div>
       </figure>
 
       <div className='px-7 mb-10 md:mb-8 space-y-3'>

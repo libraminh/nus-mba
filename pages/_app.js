@@ -19,6 +19,7 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import rootReducer from '@/store/index';
 import NextNProgress from 'nextjs-progressbar';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 const store = configureStore({
   reducer: rootReducer,
@@ -66,6 +67,7 @@ function MyApp({ Component, pageProps }) {
           </QueryErrorResetBoundary>
         </Provider>
       </Hydrate>
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
 }
