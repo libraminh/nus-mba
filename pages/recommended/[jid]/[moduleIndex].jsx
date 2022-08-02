@@ -21,13 +21,10 @@ import CustomiseJourneyImage from '../../../public/images/customise-journey.png'
 
 const RecommendedDetail = () => {
   const router = useRouter();
-
   const { moduleIndex, jid } = router?.query;
 
   const { journeyData } = useFetchJourneys();
-
   const { journeyDetail, refetch } = useFetchJourney(jid);
-
   const isFetching = useIsFetching();
 
   const isSpecialJourney = useSpecialJourneys(journeyDetail);
@@ -42,57 +39,67 @@ const RecommendedDetail = () => {
   };
 
   const renderContent = useMemo(() => {
-    if (!journeyDetail) return;
-
-    switch (moduleIndex) {
-      case '1':
-        return (
-          <FoundationModules
-            layout='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
-            showHeading={false}
-            journeyData={journeyDetail?.data}
-          />
-        );
-
-      case '2':
-        return (
-          <ElectiveModules
-            layout='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
-            showHeading={false}
-            coreModules={journeyDetail.data.electives}
-          >
-            {isSpecialJourney && (
-              <figure className='space-y-4'>
-                <p className='text-sm'>{realEstateSubHeading}</p>
-
-                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5'>
-                  <ModulePanel
-                    onClick={handleExternalLink}
-                    title={'Explore More'}
-                    type='custom'
-                  />
-                </div>
-              </figure>
-            )}
-          </ElectiveModules>
-        );
-
-      case '3':
-        return (
-          <ExperienceModules
-            showHeading={false}
-            coreModules={journeyDetail.data.experiences}
-            specialModules={journeyDetail.data.student_clubs}
-          />
-        );
+    if (moduleIndex === '1') {
+      return (
+        <FoundationModules
+          layout='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+          showHeading={false}
+          journeyData={journeyDetail?.data}
+        />
+      );
     }
-  }, [moduleIndex, journeyDetail, handleExternalLink, isSpecialJourney]);
+
+    if (moduleIndex === '2') {
+      return (
+        <ElectiveModules
+          layout='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+          showHeading={false}
+          coreModules={journeyDetail.data.electives}
+        >
+          {isSpecialJourney && (
+            <figure className='space-y-4'>
+              <p className='text-sm'>{realEstateSubHeading}</p>
+
+              <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5'>
+                <ModulePanel
+                  onClick={handleExternalLink}
+                  title={'Explore More'}
+                  type='custom'
+                />
+              </div>
+            </figure>
+          )}
+        </ElectiveModules>
+      );
+    }
+
+    if (moduleIndex === '3') {
+      return (
+        <ExperienceModules
+          showHeading={false}
+          coreModules={journeyDetail.data.experiences}
+          specialModules={journeyDetail.data.student_clubs}
+        />
+      );
+    }
+  }, [
+    moduleIndex,
+    journeyDetail,
+    handleExternalLink,
+    isSpecialJourney,
+    realEstateSubHeading,
+  ]);
 
   const renderHeading = useMemo(() => {
-    return journeyDetail?.data.general.sections[moduleIndex - 1].title;
+    const sectionIndex = moduleIndex - 1;
+
+    return journeyDetail?.data.general.sections[sectionIndex].title;
   }, [journeyDetail, moduleIndex]);
 
   const switchPersona = (item) => {
+    console.log('item >>>', item);
+    console.log('moduleIndex >>>', moduleIndex);
+
     router.push({
       pathname: `/recommended/${item.jID}/${moduleIndex}`,
     });
